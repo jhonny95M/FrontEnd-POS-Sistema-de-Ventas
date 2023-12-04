@@ -11,7 +11,7 @@ import { th } from 'date-fns/locale';
   selector: 'vex-category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss'],
-  animations:[
+  animations: [
     stagger40ms,
     scaleFadeIn400ms,
     fadeInRight400ms
@@ -21,25 +21,25 @@ export class CategoryListComponent implements OnInit {
 
   component
   constructor(
-    customTitle:CustomTitleService,
-    public categoryService:CategoryService
-  ) { 
+    customTitle: CustomTitleService,
+    public categoryService: CategoryService
+  ) {
     customTitle.set('Categorias')
   }
 
   ngOnInit(): void {
-    this.component=componentSettings
+    this.component = componentSettings
   }
-  rowClick(e:any){
-    let action=e.action
-    let category=e.row
-    switch(action){
+  rowClick(e: any) {
+    let action = e.action
+    let category = e.row
+    switch (action) {
       case 'edit':
         this.categoryEdit(category)
         break;
-        case 'remove':
-          this.categoryRemove(category)
-           break;
+      case 'remove':
+        this.categoryRemove(category)
+        break;
     }
   }
   categoryEdit(category: any) {
@@ -48,23 +48,32 @@ export class CategoryListComponent implements OnInit {
   categoryRemove(category: any) {
     throw new Error('Method not implemented.');
   }
-  setData(data:any = null){
-this.component.filters.stateFilter=data.value
-this.component.menuOpen=false
-this.formatGetInputs()
+  setData(data: any = null) {
+    this.component.filters.stateFilter = data.value
+    this.component.menuOpen = false
+    this.formatGetInputs()
   }
-  formatGetInputs(){
-    let inputs={
-      numFilter:0,
-    textFilter:"",
-    stateFilter:null,
-    startDate:null,
-    endDate:null
+  search(data: any) {
+    this.component.filters.numFilter = data.searchValue
+    this.component.filters.textFilter = data.searchString
+    this.formatGetInputs()
+  }
+  formatGetInputs() {
+    let inputs = {
+      numFilter: 0,
+      textFilter: "",
+      stateFilter: null,
+      startDate: null,
+      endDate: null
     }
-    if(this.component.filters.stateFilter != null){
-      inputs.stateFilter=this.component.filters.stateFilter
+    if(this.component.filters.numFilter!=""){
+      inputs.numFilter=this.component.filters.numFilter
+      inputs.textFilter=this.component.filters.textFilter
     }
-    this.component.getInputs=inputs
+    if (this.component.filters.stateFilter != null) {
+      inputs.stateFilter = this.component.filters.stateFilter
+    }
+    this.component.getInputs = inputs
   }
 
 }

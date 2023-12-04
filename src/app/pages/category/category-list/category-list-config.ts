@@ -4,7 +4,26 @@ import icCategory from "@iconify/icons-ic/twotone-category";
 import { ListTableMenu } from "src/app/commons/list-table-menu.interface";
 import icViewHeadline from "@iconify/icons-ic/twotone-view-headline";
 import icLabel from "@iconify/icons-ic/twotone-label";
+import { GenericValidators } from "@shared/validators/generic-validators";
 
+const searchOptions=[
+    {
+        label:'Nombre',
+        value:1,
+        placeholder:"Buscar por nombre",
+        validation:[GenericValidators.defaultName],
+        validation_desc:"Solo se permite  letras en esta busqueda",
+        min_length:2
+    },
+    {
+        label:'Descripcion',
+        value:2,
+        placeholder:"Buscar por descripcion",
+        validation:[GenericValidators.defaultDescription],
+        validation_desc:"Solo se permite  letras y numeros en esta busqueda",
+        min_length:2
+    }
+]
 const menuItems:ListTableMenu[]=[
     {
         type:'link',
@@ -108,6 +127,7 @@ export const componentSettings={
     //search filters
     menuItems:menuItems,
     filters:filters,
+    searchOptions:searchOptions,
     columnsFilter:tableColumns.map((column)=>{
         return {
             label:column.label,
