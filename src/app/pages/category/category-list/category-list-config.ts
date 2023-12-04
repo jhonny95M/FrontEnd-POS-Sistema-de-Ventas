@@ -1,7 +1,38 @@
 import { TableColumn } from "src/@vex/interfaces/table-column.interface";
 import { Category } from "src/app/responses/category/category.response";
 import icCategory from "@iconify/icons-ic/twotone-category";
+import { ListTableMenu } from "src/app/commons/list-table-menu.interface";
+import icViewHeadline from "@iconify/icons-ic/twotone-view-headline";
+import icLabel from "@iconify/icons-ic/twotone-label";
 
+const menuItems:ListTableMenu[]=[
+    {
+        type:'link',
+        id:'all',
+        icon:icViewHeadline,
+        label:'Todos'
+    },
+    {
+        type:'link',
+        id:'Activo',
+        value:1,
+        icon:icLabel,
+        label:'Activo',
+        classes:{
+            icon:"text-green"
+        }
+    },
+    {
+        type:'link',
+        id:'Inactivo',
+        value:0,
+        icon:icLabel,
+        label:'Incativo',
+        classes:{
+            icon:"text-gray"
+        }
+    }
+]
 const tableColumns:TableColumn<Category>[]=[
     {
         label:'Nombre',
@@ -48,6 +79,13 @@ const tableColumns:TableColumn<Category>[]=[
         cssClasses:['font-medium','w-10']
     }
 ]
+const filters={
+    numFilter:0,
+    textFilter:"",
+    stateFilter:null,
+    startDate:null,
+    endDate:null
+}
 const inputs={
     numFilter:0,
     textFilter:"",
@@ -56,13 +94,20 @@ const inputs={
     endDate:null
 }
 export const componentSettings={
+    //icons
     icCategory:icCategory,
+    //layout settings
+    menuOpen:false,
+    //table settings
     tableColumns:tableColumns,
     initialSort:"Id",
     initialSortDir:"desc",
     getInputs:inputs,
     buttonLabel:"EDITAR",
     buttonLabel2:"ELIMINAR",
+    //search filters
+    menuItems:menuItems,
+    filters:filters,
     columnsFilter:tableColumns.map((column)=>{
         return {
             label:column.label,
