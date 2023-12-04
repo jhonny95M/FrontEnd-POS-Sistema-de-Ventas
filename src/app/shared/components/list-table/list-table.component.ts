@@ -126,11 +126,13 @@ export class ListTableComponent<T> implements OnInit, OnChanges, AfterViewInit {
                     let size = this.paginator.pageSize
 
                     this.spinner.show('modal-table');
-                    return this.service!.GetAll(
+                    const data= this.service!.GetAll(
                         size, sort, this.sort.direction, this.paginator.pageIndex, this.getInputs, this.id, this.id2);
+                        
+                        return data;
                 }),
                 map(data => {
-                    
+                    console.log(data)
                     // Flip flag to show that loading has finished.
                     this.spinner.hide('modal-table');
                     // this.isRateLimitReached = false;
