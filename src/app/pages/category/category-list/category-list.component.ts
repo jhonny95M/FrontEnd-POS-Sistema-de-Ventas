@@ -8,6 +8,7 @@ import { componentSettings } from './category-list-config';
 import { th } from 'date-fns/locale';
 import { DatesFilter } from '@shared/functions/actions';
 import { MatDialog } from '@angular/material/dialog';
+import { CategoryManageComponent } from '../category-manage/category-manage.component';
 
 @Component({
   selector: 'vex-category-list',
@@ -84,6 +85,14 @@ export class CategoryListComponent implements OnInit {
       inputs.endDate=this.component.filters.endDate
     }
     this.component.getInputs = inputs
+  }
+  openDialogRegister(){
+    this._dialog.open(CategoryManageComponent,{
+      disableClose:true,
+      width:'400px'
+    }).afterClosed().subscribe(res=>{
+      if(res)this.formatGetInputs()
+    })
   }
 
 }
