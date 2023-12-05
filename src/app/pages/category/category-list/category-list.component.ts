@@ -5,10 +5,12 @@ import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { CategoryService } from 'src/app/services/category.service';
 import { componentSettings } from './category-list-config';
-import { th } from 'date-fns/locale';
+import { th, tr } from 'date-fns/locale';
 import { DatesFilter } from '@shared/functions/actions';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CategoryManageComponent } from '../category-manage/category-manage.component';
+import { CategoryApi } from 'src/app/responses/category/category.response';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'vex-category-list',
@@ -34,24 +36,7 @@ export class CategoryListComponent implements OnInit {
   ngOnInit(): void {
     this.component = componentSettings
   }
-  rowClick(e: any) {
-    let action = e.action
-    let category = e.row
-    switch (action) {
-      case 'edit':
-        this.categoryEdit(category)
-        break;
-      case 'remove':
-        this.categoryRemove(category)
-        break;
-    }
-  }
-  categoryEdit(category: any) {
-    throw new Error('Method not implemented.');
-  }
-  categoryRemove(category: any) {
-    throw new Error('Method not implemented.');
-  }
+  
   setData(data: any = null) {
     this.component.filters.stateFilter = data.value
     this.component.menuOpen = false
@@ -94,5 +79,46 @@ export class CategoryListComponent implements OnInit {
       if(res)this.formatGetInputs()
     })
   }
-
+  rowClick(e: any) {
+    let action = e.action
+    let category = e.row
+    switch (action) {
+      case 'edit':
+        this.categoryEdit(category)
+        break;
+      case 'remove':
+        this.categoryRemove(category)
+        break;
+    }
+  }
+  categoryEdit(category: CategoryApi) {
+    const dialogConfig=new MatDialogConfig()
+    dialogConfig.data=category
+    let dialogRef=this._dialog.open(CategoryManageComponent,{
+      data:dialogConfig,
+      disableClose:true,
+      width:'400px'
+    })
+    dialogRef.afterClosed().subscribe(res=>{
+      if(res)this.formatGetInputs()
+    })
+  }
+  categoryRemove(category: any) {
+    Swal.fire({
+      title:`¿Realmente  deseas eliminar la categoria ${category.name}?`,
+      text:'Se borrara de forma  permanente!',
+      icon:'warning',
+      showCancelButton:true,
+      focusCancel:true,
+      confirmButtonColor:'rgb(210,155,253)',
+      cancelButtonColor:'rgb(79,109,253)',
+      confirmButtonText:'Sí, eliminar',
+      cancelButtonText:'Cancelar',
+      width:430
+    }).then(result=>{
+      if(result.isConfirmed){
+        this.categoryService.CategoryRemove(category.categoryId).subscribe(()=>this.formatGetInputs())
+      }
+    })
+  }
 }

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertService } from '@shared/services/alert.service';
 import { CategoryService } from 'src/app/services/category.service';
+import { th, tr } from 'date-fns/locale';
 
 @Component({
   selector: 'vex-category-manage',
@@ -26,6 +27,22 @@ export class CategoryManageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.data!=null){
+      console.log(this.data)
+      this.CategoryById(this.data.data.categoryId)
+    }
+  }
+  CategoryById(categoryId: number):void {
+    this.categoryService.CategoryById(categoryId).subscribe(
+      (res)=>{
+        this.form.reset({
+          categoryId:res.categoryId,
+          name:res.name,
+          description:res.description,
+          state:res.state
+        })
+      }
+    )
   }
   initForm(): void {
 
@@ -40,11 +57,11 @@ export class CategoryManageComponent implements OnInit {
     if(this.form.invalid)
       return Object.values(this.form.controls).forEach(controls=>controls.markAllAsTouched())
       const categoryId=this.form.get('categoryId').value
-      if(categoryId>0){
+      if(categoryId>0)
         this.categoryEdit(categoryId)
-      }else{
+      else
         this.categoryRegister()
-      }
+      
     }
   
   categoryRegister():void {
@@ -58,7 +75,13 @@ export class CategoryManageComponent implements OnInit {
     })
   }
   categoryEdit(categoryId: number) {
-    throw new Error('Method not implemented.');
+    this.categoryService.CategoryEdit(categoryId,this.form.value).subscribe((resp=>{
+      if(resp.isSucces){
+      this.alert.success('Excelente',resp.message)
+      this.dialogRef.close(true)
+      }else
+      this.alert.warn('Atencion',resp.message)
+    }))
   }
 
 }

@@ -4,6 +4,6 @@ export const endpoint=
     LIST_SELECT_CATEGORIES:'Category/Select',
     CATEGORY_BY_ID:'Category/',
     CATEGORY_REGISTER:'Category/',
-    CATEGORY_EDIT:'Category/Edit/',
-    CATEGORY_REMOVE:'Category/Remove'
+    CATEGORY_EDIT:'Category/',
+    CATEGORY_REMOVE:'Category/'
 }
